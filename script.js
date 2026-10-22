@@ -1,55 +1,12 @@
-let products=[],selectedFile=null,cart=[];
-
-async function loadProducts(){
- try{
-  const r=await fetch('/api/products');
-  if(r.ok) products=await r.json();
-  else{
-   const r2=await fetch('https://raw.githubusercontent.com/technologyfutureenterprise-debug/imperiojg19/main/productos.json?t='+Date.now());
-   if(r2.ok) products=await r2.json();
-  }
- }catch{products=[];}
- document.getElementById('status').textContent=`✅ ${products.length} productos desde GitHub`;
- render();
-}
-
-function render(){
- const grid=document.getElementById('grid');
- const empty=document.getElementById('empty');
- grid.innerHTML='';
- if(products.length===0){empty.classList.remove('hidden');return;}
- empty.classList.add('hidden');
- products.forEach(p=>{
-  const d=document.createElement('div');d.className='card';
-  d.innerHTML=`<img src="${p.img}"><div class="card-info"><h4>${p.name}</h4><p>${p.sizes||''}</p><div class="price">$${Number(p.price).toLocaleString('es-CO')}</div><button onclick="addCart('${p.id}')">AGREGAR</button></div>`;
-  grid.appendChild(d);
- });
- document.getElementById('adminList').innerHTML=products.map(p=>`<div style="display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.05);padding:8px;border-radius:12px"><img src="${p.img}" width="40" style="border-radius:8px"><span style="flex:1;font-size:12px">${p.name}</span><button onclick="deleteProd('${p.id}')" style="color:#f55;background:none;border:none">Borrar</button></div>`).join('');
-}
-
-window.addCart=id=>{cart.push(products.find(p=>p.id==id));document.getElementById('cartCount').textContent=cart.length;}
-window.deleteProd=async id=>{if(!confirm('Borrar?'))return;const upd=products.filter(p=>p.id!=id);await fetch('/api/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({products:upd})});loadProducts();}
-function toBase64(f){return new Promise(r=>{const rd=new FileReader();rd.onload=()=>r(rd.result.split(',')[1]);rd.readAsDataURL(f);});}
-
-document.getElementById('adminLock').onclick=()=>document.getElementById('adminModal').classList.remove('hidden');
-document.getElementById('closeAdmin').onclick=()=>document.getElementById('adminModal').classList.add('hidden');
-document.getElementById('closeBg').onclick=()=>document.getElementById('adminModal').classList.add('hidden');
-document.getElementById('loginBtn').onclick=()=>{if(document.getElementById('passInput').value==='JG19'){document.getElementById('loginBox').classList.add('hidden');document.getElementById('panelBox').classList.remove('hidden');}else alert('Clave incorrecta');};
-document.getElementById('pFile').onchange=e=>{selectedFile=e.target.files[0];document.getElementById('preview').textContent='Foto: '+selectedFile.name;};
-document.getElementById('publishBtn').onclick=async()=>{
- const name=document.getElementById('pName').value,price=parseInt(document.getElementById('pPrice').value),sizes=document.getElementById('pSizes').value,st=document.getElementById('upStatus');
- if(!name||!price||!selectedFile) return alert('Falta nombre, precio o foto');
- st.textContent='⏳ Subiendo foto...';const b64=await toBase64(selectedFile);
- const up=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:selectedFile.name,content:b64})});
- if(!up.ok){st.textContent='Error foto';return;}const{url}=await up.json();
- st.textContent='⏳ Guardando...';const updated=[{id:Date.now().toString(),name,price,sizes,img:url},...products];
- const sv=await fetch('/api/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({products:updated})});
- if(!sv.ok){st.textContent='Error';return;}st.textContent='✅ PUBLICADO!';products=updated;render();
-};
-document.getElementById('cartBtn').onclick=()=>{
- if(cart.length==0) return alert('Carrito vacío');
- const total=cart.reduce((s,p)=>s+p.price,0);
- const msg=encodeURIComponent(`Hola IMPERIO JG19, quiero: ${cart.map(p=>p.name).join(', ')} Total $${total}`);
- window.open(`https://wa.me/573053680666?text=${msg}`,'_blank');
-};
+const intro=document.getElementById('intro');const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);const renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true,alpha:true});renderer.setSize(innerWidth,innerHeight);const cube=new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshStandardMaterial({color:0xd4af37,metalness:.8,roughness:.2}));scene.add(cube);const light=new THREE.PointLight(0xffffff,1);light.position.set(5,5,5);scene.add(light);camera.position.z=5;(function animate(){requestAnimationFrame(animate);cube.rotation.x+=0.01;cube.rotation.y+=0.015;renderer.render(scene,camera)})();intro.addEventListener('click',()=>{intro.style.opacity=0;setTimeout(()=>intro.style.display='none',1000)});
+const gear=document.getElementById('adminGear'),modal=document.getElementById('adminModal');gear.onclick=()=>{modal.classList.remove('hidden');loadInventory()};document.getElementById('closeModal').onclick=()=>modal.classList.add('hidden');let ADMIN='JG19';fetch('/api/auth').then(r=>r.json()).then(d=>{if(d.admin)ADMIN=d.admin}).catch(()=>{});document.getElementById('checkPass').onclick=()=>{if(document.getElementById('passInput').value===ADMIN){document.getElementById('adminForm').classList.remove('hidden');loadInventory()}else alert('Clave incorrecta')};
+const grid=document.getElementById('products');let ALL_PRODUCTS=[];
+async function loadProducts(){try{const res=await fetch('/api/products');if(!res.ok) throw new Error();const prods=await res.json();if(!Array.isArray(prods)||!prods.length) throw new Error();ALL_PRODUCTS=prods;render(prods)}catch(e){ALL_PRODUCTS=[];grid.innerHTML=`<div style="grid-column:1/-1; text-align:center; padding:80px 20px; border:1px dashed #333; border-radius:20px; background:#0f0f0f;"><h3 style="font-family:Cinzel,serif; color:#d4af37; font-size:26px;">COLECCIÓN EN CURADURÍA</h3><p style="color:#999; margin:15px auto; max-width:420px;">Estamos seleccionando las piezas exclusivas. Contáctanos para acceso anticipado.</p><div style="display:flex; gap:12px; justify-content:center; margin-top:25px;"><a href="https://wa.me/573001234567" target="_blank" style="background:#25D366; color:#000; padding:12px 22px; border-radius:12px; text-decoration:none; font-weight:700;">WhatsApp</a><a href="https://instagram.com/imperiojg19" target="_blank" style="background:#fff; color:#000; padding:12px 22px; border-radius:12px; text-decoration:none; font-weight:700;">Instagram</a></div></div>`}}
+function render(list){grid.innerHTML=list.map((p,i)=>`<div class="card"><div class="carousel" id="car-${i}"><img src="${(p.images&&p.images[0])||p.image}" /><div class="dots">${(p.images||[p.image]).map((_,k)=>`<span class="${k==0?'active':''}" onclick="showImg(${i},${k})"></span>`).join('')}</div></div><div class="card-body"><h4>${p.name}</h4><p>$ ${p.price} COP</p><div class="buy"><a class="wa-buy" target="_blank" href="https://wa.me/573001234567?text=Hola%20quiero%20${encodeURIComponent(p.name)}">WhatsApp</a><a class="ig-buy" target="_blank" href="https://instagram.com/imperiojg19">Instagram</a></div></div></div>`).join('')}
+window.showImg=(prodIdx,imgIdx)=>{const p=ALL_PRODUCTS[prodIdx];const img=(p.images||[p.image])[imgIdx];document.querySelector(`#car-${prodIdx} img`).src=img;document.querySelectorAll(`#car-${prodIdx} .dots span`).forEach((d,k)=>d.className=k==imgIdx?'active':'')};
+async function loadInventory(){const inv=document.getElementById('inventory');try{const res=await fetch('/api/products');const prods=res.ok?await res.json():[];ALL_PRODUCTS=prods;if(prods.length==0){inv.innerHTML='<p style="color:#777; font-size:13px;">No hay productos aún</p>';return}inv.innerHTML=prods.map((p,i)=>`<div style="background:#1a1a1a; border:1px solid #222; border-radius:12px; padding:10px; display:flex; gap:10px; align-items:center;"><img src="${(p.images&&p.images[0])||p.image}" style="width:50px; height:50px; object-fit:cover; border-radius:8px;" /><div style="flex:1;"><b style="font-size:13px;">${p.name}</b><br><span style="color:#d4af37; font-size:12px;">$${p.price}</span><br><span style="color:#666; font-size:10px;">${(p.images||[]).length||1} fotos</span></div><div style="display:flex; gap:6px;"><button onclick="editProd(${i})" style="background:#fff; padding:6px 10px; font-size:11px;">Editar</button><button onclick="deleteProd(${i})" style="background:#ff4444; color:#fff; padding:6px 10px; font-size:11px;">X</button></div></div>`).join('')}catch(e){inv.innerHTML='Error'}}
+window.deleteProd=async(idx)=>{if(!confirm('¿Eliminar?'))return;const res=await fetch('/api/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete', index:idx})});const d=await res.json();if(d.ok){loadProducts();loadInventory()}else alert(d.error)};
+window.editProd=async(idx)=>{const p=ALL_PRODUCTS[idx];const newName=prompt('Nuevo nombre:',p.name);if(newName===null)return;const newPrice=prompt('Nuevo precio:',p.price);if(newPrice===null)return;const res=await fetch('/api/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'edit', index:idx, name:newName, price:newPrice})});const d=await res.json();if(d.ok){loadProducts();loadInventory()}else alert(d.error)};
+document.getElementById('pFile').addEventListener('change',function(){const preview=document.getElementById('preview');preview.innerHTML='';Array.from(this.files).forEach(f=>{const img=document.createElement('img');img.style.width='50px';img.style.height='50px';img.style.objectFit='cover';img.style.borderRadius='8px';img.src=URL.createObjectURL(f);preview.appendChild(img)})});
+document.getElementById('publishBtn').onclick=async()=>{const name=document.getElementById('pName').value,price=document.getElementById('pPrice').value,files=document.getElementById('pFile').files,status=document.getElementById('status');if(!name||!price||!files.length)return alert('Llena todo');status.textContent='Subiendo '+files.length+' fotos...';const imagesBase64=[];for(let f of files){const b64=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(f)});imagesBase64.push({b64, name:f.name})}const res=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name, price, images:imagesBase64})});const data=await res.json();if(data.ok){status.textContent='¡Publicado!';document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pFile').value='';document.getElementById('preview').innerHTML='';loadProducts();loadInventory()}else status.textContent='Error: '+data.error};
 loadProducts();

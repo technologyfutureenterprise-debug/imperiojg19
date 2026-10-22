@@ -1,60 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IMPERIO JG19 | Maletines Cali</title>
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IMPERIO JG19 | Lujo Accesible</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-  <div class="nav">
-    <h1>IMPERIO JG19</h1>
-    <div>
-      <button id="cartBtn">🛒 <span id="cartCount">0</span></button>
-      <button id="adminLock">⚙️</button>
-    </div>
-  </div>
-</header>
-
-<main>
-  <div class="hero">
-    <h2>MALETINES PREMIUM CALI</h2>
-    <p id="status">● Conectando a GitHub...</p>
-  </div>
-  <div id="grid" class="grid"></div>
-  <div id="empty" class="empty hidden">
-    <h3>SIN PRODUCTOS AÚN</h3>
-    <p>Entra con ⚙️ contraseña JG19</p>
-  </div>
-</main>
+<div id="intro"><canvas id="c"></canvas><div class="intro-text"><h1>JG19</h1><p>IMPERIO</p><span>TOCA PARA ENTRAR</span></div></div>
+<header class="header"><div class="logo">JG19 <span>IMPERIO</span></div><div class="socials"><a href="https://instagram.com/imperiojg19" target="_blank" class="icon-btn ig">IG</a><a href="https://wa.me/573001234567" target="_blank" class="icon-btn wa">WA</a><button id="adminGear">⚙️</button></div></header>
+<section class="hero"><h2>LUJO ACCESIBLE EN CALI</h2><p>Colección Premium • Curaduría Exclusiva</p></section>
+<main id="products" class="products-grid"></main>
+<footer class="footer"><div class="footer-grid"><div><h4>IMPERIO JG19</h4><p>Lujo accesible, diseños exclusivos.<br>Curaduría premium en Cali.</p></div><div><h4>Contacto</h4><p>WhatsApp: +57 300 123 4567<br>Instagram: @imperiojg19<br>Cali, Valle del Cauca</p></div><div><h4>Información</h4><p>Envíos contraentrega en Cali<br>Envíos nacionales 24/48h<br>Garantía total</p></div></div><div class="copy">© 2026 IMPERIO JG19</div></footer>
 
 <div id="adminModal" class="modal hidden">
-  <div class="modal-bg" id="closeBg"></div>
-  <div class="modal-box">
-    <div style="display:flex;justify-content:space-between">
-      <h3 style="font-family:'Bebas Neue';font-size:22px">PANEL ADMIN</h3>
-      <button id="closeAdmin">✕</button>
+  <div class="modal-content" style="max-width:500px; max-height:90vh; overflow-y:auto;">
+    <h3>Panel Admin JG19</h3>
+    <input type="password" id="passInput" placeholder="Clave" />
+    <button id="checkPass">Validar</button>
+    <div id="adminForm" class="hidden">
+      <h4 style="color:#d4af37; margin-top:10px;">Nuevo Producto</h4>
+      <input type="text" id="pName" placeholder="Nombre del producto" />
+      <input type="number" id="pPrice" placeholder="Precio" />
+      <label style="font-size:12px; color:#aaa;">Varias fotos (1 a 4)</label>
+      <input type="file" id="pFile" accept="image/*" multiple />
+      <div id="preview" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+      <button id="publishBtn">PUBLICAR AHORA</button>
+      <p id="status"></p>
+      <hr style="margin:20px 0; border-color:#222;" />
+      <h4 style="color:#d4af37;">Inventario Publicado</h4>
+      <div id="inventory"></div>
     </div>
-    <div id="loginBox" class="login">
-      <input id="passInput" type="password" placeholder="Contraseña: JG19">
-      <button id="loginBtn" class="gold">ENTRAR</button>
-    </div>
-    <div id="panelBox" class="panel hidden">
-      <input id="pName" placeholder="Nombre: Kavalssv">
-      <input id="pPrice" type="number" placeholder="Precio: 13847">
-      <input id="pSizes" placeholder="Detalle: 40x30 cuero">
-      <input id="pFile" type="file" accept="image/*">
-      <p id="preview" style="font-size:11px;color:#888"></p>
-      <p id="upStatus" style="font-size:11px;color:#FFD700;font-weight:700"></p>
-      <button id="publishBtn" class="gold">PUBLICAR EN GITHUB</button>
-      <div id="adminList"></div>
-    </div>
+    <button id="closeModal">Cerrar</button>
   </div>
 </div>
-
-<footer>© IMPERIO JG19 | IG @IMPERIOJG19 | WA 3053680666</footer>
 <script src="script.js"></script>
 </body>
 </html>

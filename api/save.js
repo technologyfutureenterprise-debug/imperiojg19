@@ -1,21 +1,16 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({error: 'Method not allowed'});
-  const { GITHUB_USER, GITHUB_REPO, GITHUB_TOKEN } = process.env;
-  const { products } = req.body;
-  const content = Buffer.from(JSON.stringify(products, null, 2)).toString('base64');
-  let sha = null;
-  try {
-    const r = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/productos.json`, {
-      headers: { Authorization: `token ${GITHUB_TOKEN}` }
-    });
-    if (r.ok) { const d = await r.json(); sha = d.sha; }
-  } catch {}
-  const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/productos.json`;
-  const save = await fetch(url, {
-    method: 'PUT',
-    headers: { Authorization: `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: 'update productos', content, sha })
-  });
-  if (!save.ok) return res.status(500).json({error: await save.text()});
-  return res.json({ok: true});
+export default async function handler(req,res){
+  if(req.method!=='POST') return res.status(405).json({error:'method'});
+  const {GITHUB_USER, GITHUB_REPO, GITHUB_TOKEN}=process.env;
+  const {action, index, name, price}=req.body;
+  const getUrl=`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/data/productos.json`;
+  const getRes=await fetch(getUrl,{headers:{Authorization:`Bearer ${GITHUB_TOKEN}`}});
+  if(!getRes.ok) return res.status(404).json({error:'no file'});
+  const fileData=await getRes.json();
+  const content=JSON.parse(Buffer.from(fileData.content,'base64').toString());
+  if(action==='delete'){ content.splice(index,1); }
+  if(action==='edit'){ content[index].name=name; content[index].price=price; }
+  const updated=Buffer.from(JSON.stringify(content,null,2)).toString('base64');
+  const putRes=await fetch(getUrl,{method:'PUT',headers:{Authorization:`Bearer ${GITHUB_TOKEN}`, 'Content-Type':'application/json'},body:JSON.stringify({message:`${action} ${index}`, content:updated, sha:fileData.sha})});
+  if(!putRes.ok){ const err=await putRes.text(); return res.status(500).json({error:err}); }
+  res.json({ok:true});
 }
