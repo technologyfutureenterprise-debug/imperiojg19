@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IMPERIO JG19 | Maletines Cali</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+  <div class="nav">
+    <h1>IMPERIO JG19</h1>
+    <div>
+      <button id="cartBtn">🛒 <span id="cartCount">0</span></button>
+      <button id="adminLock">⚙️</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h2>MALETINES PREMIUM CALI</h2>
+    <p id="status">● Conectando a GitHub...</p>
+  </div>
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="empty hidden">
+    <h3>SIN PRODUCTOS AÚN</h3>
+    <p>Entra con ⚙️ contraseña JG19</p>
+  </div>
+</main>
+
+<div id="adminModal" class="modal hidden">
+  <div class="modal-bg" id="closeBg"></div>
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between">
+      <h3 style="font-family:'Bebas Neue';font-size:22px">PANEL ADMIN</h3>
+      <button id="closeAdmin">✕</button>
+    </div>
+    <div id="loginBox" class="login">
+      <input id="passInput" type="password" placeholder="Contraseña: JG19">
+      <button id="loginBtn" class="gold">ENTRAR</button>
+    </div>
+    <div id="panelBox" class="panel hidden">
+      <input id="pName" placeholder="Nombre: Kavalssv">
+      <input id="pPrice" type="number" placeholder="Precio: 13847">
+      <input id="pSizes" placeholder="Detalle: 40x30 cuero">
+      <input id="pFile" type="file" accept="image/*">
+      <p id="preview" style="font-size:11px;color:#888"></p>
+      <p id="upStatus" style="font-size:11px;color:#FFD700;font-weight:700"></p>
+      <button id="publishBtn" class="gold">PUBLICAR EN GITHUB</button>
+      <div id="adminList"></div>
+    </div>
+  </div>
+</div>
+
+<footer>© IMPERIO JG19 | IG @IMPERIOJG19 | WA 3053680666</footer>
+<script src="script.js"></script>
+</body>
+</html>
