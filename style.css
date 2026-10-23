@@ -17,3 +17,11 @@
 .card-body{padding:15px}.card-body h4{font-family:'Cinzel',serif;color:#d4af37}.buy{display:flex;gap:8px;margin-top:12px}.buy a{flex:1;text-align:center;padding:10px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px}.buy .wa-buy{background:#25D366;color:#000}.buy .ig-buy{background:#fff;color:#000}
 .footer{background:#111;border-top:1px solid #222;padding:40px 25px 20px;margin-top:50px}.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;max-width:1200px;margin:auto}.footer h4{font-family:'Cinzel',serif;color:#d4af37;margin-bottom:10px;font-size:14px}.footer p{color:#999;font-size:13px;line-height:1.6}.copy{text-align:center;color:#555;font-size:11px;margin-top:30px;padding-top:20px;border-top:1px solid #1a1a1a}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:grid;place-items:center;z-index:1000}.modal.hidden{display:none}.modal-content{background:#151515;padding:25px;border-radius:16px;width:90%;max-width:380px;border:1px solid #d4af37;display:flex;flex-direction:column;gap:12px}.modal-content input{padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff}.modal-content button{padding:12px;border-radius:10px;background:#d4af37;color:#000;font-weight:700;border:none;cursor:pointer}
+.product-detail { position:relative; max-width:480px !important; text-align:left; }
+.close-x { position:absolute; top:12px; right:12px; background:#ff4444 !important; color:#fff !important; width:32px; height:32px; border-radius:50% !important; display:grid; place-items:center; font-weight:700; }
+#productDetailImages { display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; }
+#productDetailImages img { width:80px; height:80px; object-fit:cover; border-radius:10px; border:1px solid #333; }
+.btn-buy { flex:1; text-align:center; padding:12px; border-radius:12px; text-decoration:none; font-weight:700; font-size:14px; }
+.wa-btn { background:#25D366; color:#000; }
+.nequi-btn { background:#d4af37; color:#000; }
+textarea { font-family:inherit; }

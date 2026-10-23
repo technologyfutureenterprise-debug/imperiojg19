@@ -11,10 +11,33 @@
 </head>
 <body>
 <div id="intro"><canvas id="c"></canvas><div class="intro-text"><h1>JG19</h1><p>IMPERIO</p><span>TOCA PARA ENTRAR</span></div></div>
-<header class="header"><div class="logo">JG19 <span>IMPERIO</span></div><div class="socials"><a href="https://instagram.com/imperiojg19" target="_blank" class="icon-btn ig">IG</a><a href="https://wa.me/573001234567" target="_blank" class="icon-btn wa">WA</a><button id="adminGear">⚙️</button></div></header>
+<header class="header"><div class="logo">JG19 <span>IMPERIO</span></div><div class="socials"><a href="https://instagram.com/imperiojg19" target="_blank" class="icon-btn ig">IG</a><a href="https://wa.me/573053680666" target="_blank" class="icon-btn wa">WA</a><button id="adminGear">⚙️</button></div></header>
 <section class="hero"><h2>LUJO ACCESIBLE EN CALI</h2><p>Colección Premium • Curaduría Exclusiva</p></section>
 <main id="products" class="products-grid"></main>
-<footer class="footer"><div class="footer-grid"><div><h4>IMPERIO JG19</h4><p>Lujo accesible, diseños exclusivos.<br>Curaduría premium en Cali.</p></div><div><h4>Contacto</h4><p>WhatsApp: +57 300 123 4567<br>Instagram: @imperiojg19<br>Cali, Valle del Cauca</p></div><div><h4>Información</h4><p>Envíos contraentrega en Cali<br>Envíos nacionales 24/48h<br>Garantía total</p></div></div><div class="copy">© 2026 IMPERIO JG19</div></footer>
+
+<!-- MODAL PRODUCTO AL DAR CLICK A LA IMAGEN -->
+<div id="productModal" class="modal hidden">
+  <div class="modal-content product-detail">
+    <button class="close-x" id="closeProduct">X</button>
+    <div id="productDetailImages"></div>
+    <h3 id="detailName"></h3>
+    <p id="detailPrice" style="color:#d4af37; font-weight:700;"></p>
+    <p id="detailDesc" style="color:#ccc; font-size:14px; margin-top:10px; line-height:1.6;"></p>
+    <div style="display:flex; gap:10px; margin-top:18px;">
+      <a id="detailWa" target="_blank" class="btn-buy wa-btn">Comprar WhatsApp</a>
+      <a id="detailNequi" target="_blank" class="btn-buy nequi-btn">Pagar Nequi</a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><h4>IMPERIO JG19</h4><p>Lujo accesible, diseños exclusivos.<br>Curaduría premium en Cali.</p></div>
+    <div><h4>Contacto Real</h4><p>WhatsApp: +57 305 3680666<br>Nequi: +57 315 7236268<br>Instagram: @imperiojg19<br>Cali, Valle del Cauca</p></div>
+    <div><h4>Información</h4><p>Envíos contraentrega en Cali<br>Envíos nacionales 24/48h<br>Garantía total<br>Pagos Nequi / Contraentrega</p></div>
+  </div>
+  <div class="copy">© 2026 IMPERIO JG19 - Todos los derechos reservados</div>
+</footer>
 
 <div id="adminModal" class="modal hidden">
   <div class="modal-content" style="max-width:500px; max-height:90vh; overflow-y:auto;">
@@ -25,6 +48,7 @@
       <h4 style="color:#d4af37; margin-top:10px;">Nuevo Producto</h4>
       <input type="text" id="pName" placeholder="Nombre del producto" />
       <input type="number" id="pPrice" placeholder="Precio" />
+      <textarea id="pDesc" placeholder="Descripción del producto (material, tallas, etc)" style="padding:12px; border-radius:10px; border:1px solid #333; background:#0e0e0e; color:#fff; min-height:70px;"></textarea>
       <label style="font-size:12px; color:#aaa;">Varias fotos (1 a 4)</label>
       <input type="file" id="pFile" accept="image/*" multiple />
       <div id="preview" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
@@ -34,7 +58,7 @@
       <h4 style="color:#d4af37;">Inventario Publicado</h4>
       <div id="inventory"></div>
     </div>
-    <button id="closeModal">Cerrar</button>
+    <button id="closeAdmin">Cerrar Sesión</button>
   </div>
 </div>
 <script src="script.js"></script>

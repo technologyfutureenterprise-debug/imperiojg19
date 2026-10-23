@@ -1,7 +1,7 @@
 export default async function handler(req,res){
   if(req.method!=='POST') return res.status(405).json({error:'method'});
   const {GITHUB_USER, GITHUB_REPO, GITHUB_TOKEN}=process.env;
-  const {name, price, images}=req.body;
+  const {name, price, description, images}=req.body;
   const uploadedUrls=[];
   for(let img of images){
     const path=`images/${Date.now()}-${img.name}`;
@@ -14,7 +14,7 @@ export default async function handler(req,res){
   let products=[]; let sha=null;
   const get=await fetch(prodUrl,{headers:{Authorization:`Bearer ${GITHUB_TOKEN}`}});
   if(get.ok){ const j=await get.json(); sha=j.sha; products=JSON.parse(Buffer.from(j.content,'base64').toString()); }
-  products.push({name, price, images:uploadedUrls, image:uploadedUrls[0]});
+  products.push({name, price, description, images:uploadedUrls, image:uploadedUrls[0]});
   const newContent=Buffer.from(JSON.stringify(products,null,2)).toString('base64');
   const save=await fetch(prodUrl,{method:'PUT',headers:{Authorization:`Bearer ${GITHUB_TOKEN}`, 'Content-Type':'application/json'},body:JSON.stringify({message:`add ${name}`, content:newContent, ...(sha?{sha}:{})})});
   if(!save.ok){ const err=await save.text(); return res.status(500).json({error:err}); }
